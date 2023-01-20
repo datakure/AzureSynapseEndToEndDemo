@@ -16,10 +16,6 @@
 				{
 					"Name": "ProductId",
 					"Description": "The unique identifier of a Product.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "ProductId"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "long",
 						"IsComplexType": false,
@@ -28,15 +24,15 @@
 							"HIVE_TYPE_STRING": "long"
 						}
 					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "ProductId"
+					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "ProductName",
 					"Description": "The name of the Product, which normally corresponds to the 'marketing name' of the Product.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "ProductName"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "string",
 						"IsComplexType": false,
@@ -45,16 +41,16 @@
 						"Properties": {
 							"HIVE_TYPE_STRING": "string"
 						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "ProductName"
 					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "ProductInternalName",
 					"Description": "The internal name by which a Product is known.\n\nThis normally approximates the business name by which the public identifies the Product.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "ProductInternalName"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "string",
 						"IsComplexType": false,
@@ -64,15 +60,15 @@
 							"HIVE_TYPE_STRING": "string"
 						}
 					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "ProductInternalName"
+					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "ProductDescription",
 					"Description": "The description of the Product.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "ProductDescription"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "string",
 						"IsComplexType": false,
@@ -82,15 +78,15 @@
 							"HIVE_TYPE_STRING": "string"
 						}
 					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "ProductDescription"
+					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "IntroductionDate",
 					"Description": "The date that the Product was introduced for sale.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "IntroductionDate"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "date",
 						"IsComplexType": false,
@@ -99,16 +95,16 @@
 							"DateFormat": "YYYY-MM-DD",
 							"HIVE_TYPE_STRING": "date"
 						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "IntroductionDate"
 					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "AvailabilityPeriodStartDate",
 					"Description": "The starting date that the Product is available to the public.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "AvailabilityPeriodStartDate"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "date",
 						"IsComplexType": false,
@@ -117,16 +113,16 @@
 							"DateFormat": "YYYY-MM-DD",
 							"HIVE_TYPE_STRING": "date"
 						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "AvailabilityPeriodStartDate"
 					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "AvailabilityPeriodEndDate",
 					"Description": "The ending date that the Product is available to the public.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "AvailabilityPeriodEndDate"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "date",
 						"IsComplexType": false,
@@ -135,16 +131,16 @@
 							"DateFormat": "YYYY-MM-DD",
 							"HIVE_TYPE_STRING": "date"
 						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "AvailabilityPeriodEndDate"
 					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "AbandonmentDate",
 					"Description": "The date that the Product was abandoned or no longer offered to the public.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "AbandonmentDate"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "date",
 						"IsComplexType": false,
@@ -154,15 +150,15 @@
 							"HIVE_TYPE_STRING": "date"
 						}
 					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "AbandonmentDate"
+					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "BrandMark",
 					"Description": "The 'brand mark' is that part of the brand that can be recognized - such as a symbol that identifies a company or product.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "BrandMark"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "binary",
 						"IsComplexType": false,
@@ -170,16 +166,16 @@
 						"Properties": {
 							"HIVE_TYPE_STRING": "binary"
 						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "BrandMark"
 					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "Trademark",
 					"Description": "A 'trademark' is a brand name or brand mark that is given legal protection.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "Trademark"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "binary",
 						"IsComplexType": false,
@@ -187,16 +183,16 @@
 						"Properties": {
 							"HIVE_TYPE_STRING": "binary"
 						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "Trademark"
 					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "OfferingLogo",
 					"Description": "A design, symbol or series of words that identifies the product.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "OfferingLogo"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "binary",
 						"IsComplexType": false,
@@ -205,15 +201,15 @@
 							"HIVE_TYPE_STRING": "binary"
 						}
 					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "OfferingLogo"
+					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "OfferingPriceAmount",
 					"Description": "The price of the offering.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "OfferingPriceAmount"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "decimal",
 						"IsComplexType": false,
@@ -224,15 +220,15 @@
 							"HIVE_TYPE_STRING": "decimal"
 						}
 					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "OfferingPriceAmount"
+					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "BrandCategoryId",
 					"Description": "The unique identifier of a Brand Category.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "BrandCategoryId"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "integer",
 						"IsComplexType": false,
@@ -240,16 +236,16 @@
 						"Properties": {
 							"HIVE_TYPE_STRING": "integer"
 						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "BrandCategoryId"
 					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "BrandTypeId",
 					"Description": "The unique identifier of the Brand Type.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "BrandTypeId"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "integer",
 						"IsComplexType": false,
@@ -258,15 +254,15 @@
 							"HIVE_TYPE_STRING": "integer"
 						}
 					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "BrandTypeId"
+					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "ItemSku",
 					"Description": "The Stock Keeping Unit identifier, which is typically used for inventory-related activities.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "ItemSku"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "string",
 						"IsComplexType": false,
@@ -276,15 +272,15 @@
 							"HIVE_TYPE_STRING": "string"
 						}
 					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "ItemSku"
+					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "ProductTypeId",
 					"Description": "The unique identifier of a Product Type.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "ProductTypeId"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "integer",
 						"IsComplexType": false,
@@ -292,16 +288,16 @@
 						"Properties": {
 							"HIVE_TYPE_STRING": "integer"
 						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "ProductTypeId"
 					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "PrimaryBrandId",
 					"Description": "The unique identifier of a Brand.",
-					"BaseAttributeReference": {
-						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
-						"Name": "PrimaryBrandId"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "integer",
 						"IsComplexType": false,
@@ -309,6 +305,10 @@
 						"Properties": {
 							"HIVE_TYPE_STRING": "integer"
 						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "HealthcareProduct.cdm.json/HealthcareProduct",
+						"Name": "PrimaryBrandId"
 					},
 					"DeltaFormatInvalidMessages": []
 				}
@@ -333,7 +333,7 @@
 			},
 			"Properties": {
 				"textinputformat.record.delimiter": ",",
-				"compression": "",
+				"compression": "{\"type\":\"None\",\"level\":\"optimal\"}",
 				"derivedModelAttributeInfo": "{\"attributeReferences\":{\"ProductId\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"ProductId\"},\"ProductName\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"ProductName\"},\"ProductInternalName\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"ProductInternalName\"},\"ProductDescription\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"ProductDescription\"},\"IntroductionDate\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"IntroductionDate\"},\"AvailabilityPeriodStartDate\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"AvailabilityPeriodStartDate\"},\"AvailabilityPeriodEndDate\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"AvailabilityPeriodEndDate\"},\"AbandonmentDate\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"AbandonmentDate\"},\"BrandMark\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"BrandMark\"},\"Trademark\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"Trademark\"},\"OfferingLogo\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"OfferingLogo\"},\"OfferingPriceAmount\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"OfferingPriceAmount\"},\"BrandCategoryId\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"BrandCategoryId\"},\"BrandTypeId\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"BrandTypeId\"},\"ItemSku\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"ItemSku\"},\"ProductTypeId\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"ProductTypeId\"},\"PrimaryBrandId\":{\"entity\":\"HealthcareProduct.cdm.json/HealthcareProduct\",\"name\":\"PrimaryBrandId\"}}}"
 			},
 			"Compressed": false,
