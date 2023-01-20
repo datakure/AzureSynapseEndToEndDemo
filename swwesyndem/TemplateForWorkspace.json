@@ -4541,7 +4541,7 @@
 									},
 									{
 										"Name": "BranchName",
-										"Description": "The name of the Sales Location.",
+										"Description": "The name of the Branch Location.",
 										"OriginDataTypeName": {
 											"TypeName": "string",
 											"IsComplexType": false,
@@ -4636,7 +4636,7 @@
 								"IsStoredAsSubdirectories": false
 							},
 							"Properties": {
-								"DerivedModelEntityInfo": "{\"entityDirectives\":{\"baseEntityReference\":{\"name\":\"Branch\",\"path\":\"Branch.cdm.json/Branch\"},\"description\":\"A Bank site or location that sells Bank Products.\\n\\nA branch is any banking facility away from a bank's main office that accepts deposits or makes loans.\\n\\nState laws strictly control branches of state and national banks.     Savings and loan and thrift institutions have been generally exempted.   \\n\\nA Branch may be a full-service branch or a mini-branch.\\nA mini-branch is a specialized branch office that offers a limited number of banking services.\",\"primaryKey\":[\"BranchId\"],\"projectionInfo\":{\"attributes\":[{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"Branch.cdm.json/Branch\",\"name\":\"BranchId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Branch.\",\"isNullable\":false,\"name\":\"BranchId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"Branch.cdm.json/Branch\",\"name\":\"BranchName\"},\"dataType\":\"string\",\"dataTypeLength\":256,\"description\":\"The name of the Sales Location.\",\"isNullable\":true,\"name\":\"BranchName\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"Branch.cdm.json/Branch\",\"name\":\"BranchTypeId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a branch type.\",\"isNullable\":true,\"name\":\"BranchTypeId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"Branch.cdm.json/Branch\",\"name\":\"ChannelId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Channel.\",\"isNullable\":true,\"name\":\"ChannelId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"Branch.cdm.json/Branch\",\"name\":\"FinancialInstitutionId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Financial Institution.\",\"isNullable\":true,\"name\":\"FinancialInstitutionId\"}]}}}",
+								"DerivedModelEntityInfo": "{\"entityDirectives\":{\"name\":\"Branch\",\"description\":\"A Bank site or location that sells Bank Products.\\n\\nA branch is any banking facility away from a bank's main office that accepts deposits or makes loans.\\n\\nState laws strictly control branches of state and national banks.     Savings and loan and thrift institutions have been generally exempted.   \\n\\nA Branch may be a full-service branch or a mini-branch.\\nA mini-branch is a specialized branch office that offers a limited number of banking services.\",\"baseEntityReference\":{\"name\":\"Branch\",\"path\":\"Branch.cdm.json/Branch\"},\"primaryKey\":[\"BranchId\"],\"projectionInfo\":{\"attributes\":[{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"Branch.cdm.json/Branch\",\"name\":\"BranchId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Branch.\",\"isNullable\":false,\"name\":\"BranchId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"Branch.cdm.json/Branch\",\"name\":\"BranchName\"},\"dataType\":\"string\",\"dataTypeLength\":256,\"description\":\"The name of the Branch Location.\",\"isNullable\":true,\"name\":\"BranchName\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"Branch.cdm.json/Branch\",\"name\":\"BranchTypeId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a branch type.\",\"isNullable\":true,\"name\":\"BranchTypeId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"Branch.cdm.json/Branch\",\"name\":\"ChannelId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Channel.\",\"isNullable\":true,\"name\":\"ChannelId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"Branch.cdm.json/Branch\",\"name\":\"FinancialInstitutionId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Financial Institution.\",\"isNullable\":true,\"name\":\"FinancialInstitutionId\"}]}}}",
 								"Description": "A Bank site or location that sells Bank Products.\n\nA branch is any banking facility away from a bank's main office that accepts deposits or makes loans.\n\nState laws strictly control branches of state and national banks.     Savings and loan and thrift institutions have been generally exempted.   \n\nA Branch may be a full-service branch or a mini-branch.\nA mini-branch is a specialized branch office that offers a limited number of banking services.",
 								"DisplayFolderInfo": "{\"name\":\"Channel\",\"colorCode\":\"#917EDB\"}",
 								"PrimaryKeys": "BranchId",
@@ -4644,7 +4644,8 @@
 							},
 							"Retention": 0,
 							"Temporary": false,
-							"IsRewriteEnabled": false
+							"IsRewriteEnabled": false,
+							"Partitioning": {}
 						},
 						"Source": {
 							"Type": "SPARK"
@@ -13019,18 +13020,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/dswesyndem')]",
-			"type": "Microsoft.Synapse/workspaces/sqlPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"collation": "SQL_Latin1_General_CP1_CI_AS",
-				"maxSizeBytes": 263882790666240,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "westeurope"
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/spwesyndem')]",
 			"type": "Microsoft.Synapse/workspaces/bigDataPools",
 			"apiVersion": "2019-06-01-preview",
@@ -13050,6 +13039,18 @@
 				"sparkVersion": "3.1",
 				"isComputeIsolationEnabled": false,
 				"sessionLevelPackagesEnabled": false,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "westeurope"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/dswesyndem')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
 				"annotations": []
 			},
 			"dependsOn": [],
