@@ -1,0 +1,20 @@
+{
+	"name": "GrantAccess",
+	"properties": {
+		"folder": {
+			"name": "Admin"
+		},
+		"content": {
+			"query": "\n-- Run on each serverless database\nCREATE USER [pv-we-purview-lea] FOR LOGIN [pv-we-purview-lea];\ngo\nALTER ROLE db_datareader ADD MEMBER [pv-we-purview-lea]; \ngo\n\n-- Run on dedicated pool\nCREATE USER [pv-we-purview-lea] FROM EXTERNAL PROVIDER\nGO\nEXEC sp_addrolemember 'db_datareader', [pv-we-purview-lea]\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "HealthcareProviders",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
