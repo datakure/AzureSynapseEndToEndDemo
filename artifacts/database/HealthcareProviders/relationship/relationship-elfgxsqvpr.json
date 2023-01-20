@@ -1,0 +1,26 @@
+{
+	"name": "relationship-elfgxsqvpr",
+	"properties": {
+		"Name": "relationship-elfgxsqvpr",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "HealthcareProviders"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Vendor",
+		"ToTableName": "Order",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "VendorId",
+				"ToColumnName": "VendorId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Vendor.cdm.json/Vendor\",\"toEntity\":\"Order.cdm.json/Order\",\"joinPairs\":[{\"fromAttribute\":\"VendorId\",\"toAttribute\":\"VendorId\"}]}}"
+		}
+	},
+	"type": "RELATIONSHIP"
+}
