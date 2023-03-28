@@ -16,10 +16,6 @@
 				{
 					"Name": "CityId",
 					"Description": "The unique identifier of a City.",
-					"BaseAttributeReference": {
-						"Entity": "City.cdm.json/City",
-						"Name": "CityId"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "integer",
 						"IsComplexType": false,
@@ -28,15 +24,15 @@
 							"HIVE_TYPE_STRING": "integer"
 						}
 					},
+					"BaseAttributeReference": {
+						"Entity": "City.cdm.json/City",
+						"Name": "CityId"
+					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "CityName",
 					"Description": "The name of the City.",
-					"BaseAttributeReference": {
-						"Entity": "City.cdm.json/City",
-						"Name": "CityName"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "string",
 						"IsComplexType": false,
@@ -46,15 +42,15 @@
 							"HIVE_TYPE_STRING": "string"
 						}
 					},
+					"BaseAttributeReference": {
+						"Entity": "City.cdm.json/City",
+						"Name": "CityName"
+					},
 					"DeltaFormatInvalidMessages": []
 				},
 				{
 					"Name": "CountyCode",
 					"Description": "A three-digit code assigned by the National Institute of Standards and Technology (NIST) to identify each county and statistically equivalent entity within a State.\n\nThe NIST assigns the codes based on the alphabetic sequence of county names; it documents these codes in a FIPS publication (FIPS PUB 6). The Census Bureau also documents these codes in its Geographic Identification Code Scheme. The NIST leaves gaps in the numbering system to accommodate new counties or statistically equivalent entities. See also Federal Information Processing Standards, Geographic Identification Code Scheme.",
-					"BaseAttributeReference": {
-						"Entity": "City.cdm.json/City",
-						"Name": "CountyCode"
-					},
 					"OriginDataTypeName": {
 						"TypeName": "string",
 						"IsComplexType": false,
@@ -62,6 +58,77 @@
 						"Length": 3,
 						"Properties": {
 							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "City.cdm.json/City",
+						"Name": "CountyCode"
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "StateId",
+					"Description": "",
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsNullable": false,
+						"IsComplexType": false,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "LatestRecordedPopulation",
+					"Description": "",
+					"OriginDataTypeName": {
+						"TypeName": "long",
+						"IsNullable": true,
+						"IsComplexType": false,
+						"Properties": {
+							"HIVE_TYPE_STRING": "long"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "LastEditedBy",
+					"Description": "",
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsNullable": false,
+						"IsComplexType": false,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "ValidFrom",
+					"Description": "",
+					"OriginDataTypeName": {
+						"TypeName": "timestamp",
+						"IsNullable": false,
+						"IsComplexType": false,
+						"Properties": {
+							"TimestampFormat": "YYYY-MM-DD HH:MM:SS.fffffffff",
+							"HIVE_TYPE_STRING": "timestamp"
+						}
+					},
+					"DeltaFormatInvalidMessages": []
+				},
+				{
+					"Name": "ValidTo",
+					"Description": "",
+					"OriginDataTypeName": {
+						"TypeName": "timestamp",
+						"IsNullable": false,
+						"IsComplexType": false,
+						"Properties": {
+							"TimestampFormat": "YYYY-MM-DD HH:MM:SS.fffffffff",
+							"HIVE_TYPE_STRING": "timestamp"
 						}
 					},
 					"DeltaFormatInvalidMessages": []
@@ -94,12 +161,11 @@
 			"IsStoredAsSubdirectories": false
 		},
 		"Properties": {
-			"DerivedModelEntityInfo": "{\"entityDirectives\":{\"baseEntityReference\":{\"name\":\"City\",\"path\":\"City.cdm.json/City\"},\"description\":\"A large or important municipality in the U.S. governed under a charter granted by the state.\\n\\nA type of incorporated place in 49 States and the District of Columbia. In 20 States, some or all cities are not part of any MCD, and the Census Bureau also treats these as county subdivisions, statistically equivalent to MCDs. See also county subdivision, dependent place, incorporated place, independent place. \\n\\nA type of incorporated place in all states and the District of Columbia. In agreement with the State of Hawaii, however, the Census Bureau does not recognize the city of Honolulu for presentation of decennial census data. In Virginia, all cities are not part of any county, and the Census Bureau treats them as county equivalents as well as places for purposes of data presentation; there also is one such independent city in each of three states: Maryland, Missouri, and Nevada. In 20 states, some or all cities are not part of any minor civil division, and the Census Bureau treats them as county subdivisions for purposes of data presentation. See county equivalent, county subdivision, governmental unit, incorporated place, and independent city.\",\"primaryKey\":[\"CityId\"],\"projectionInfo\":{\"attributes\":[{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"City.cdm.json/City\",\"name\":\"CityId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a City.\",\"isNullable\":false,\"name\":\"CityId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"City.cdm.json/City\",\"name\":\"CityName\"},\"dataType\":\"string\",\"dataTypeLength\":256,\"description\":\"The name of the City.\",\"isNullable\":true,\"name\":\"CityName\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"City.cdm.json/City\",\"name\":\"CountyCode\"},\"dataType\":\"string\",\"dataTypeLength\":3,\"description\":\"A three-digit code assigned by the National Institute of Standards and Technology (NIST) to identify each county and statistically equivalent entity within a State.\\n\\nThe NIST assigns the codes based on the alphabetic sequence of county names; it documents these codes in a FIPS publication (FIPS PUB 6). The Census Bureau also documents these codes in its Geographic Identification Code Scheme. The NIST leaves gaps in the numbering system to accommodate new counties or statistically equivalent entities. See also Federal Information Processing Standards, Geographic Identification Code Scheme.\",\"isNullable\":true,\"name\":\"CountyCode\"}]}}}",
+			"DerivedModelEntityInfo": "{\"entityDirectives\":{\"name\":\"City\",\"description\":\"A large or important municipality in the U.S. governed under a charter granted by the state.\\n\\nA type of incorporated place in 49 States and the District of Columbia. In 20 States, some or all cities are not part of any MCD, and the Census Bureau also treats these as county subdivisions, statistically equivalent to MCDs. See also county subdivision, dependent place, incorporated place, independent place. \\n\\nA type of incorporated place in all states and the District of Columbia. In agreement with the State of Hawaii, however, the Census Bureau does not recognize the city of Honolulu for presentation of decennial census data. In Virginia, all cities are not part of any county, and the Census Bureau treats them as county equivalents as well as places for purposes of data presentation; there also is one such independent city in each of three states: Maryland, Missouri, and Nevada. In 20 states, some or all cities are not part of any minor civil division, and the Census Bureau treats them as county subdivisions for purposes of data presentation. See county equivalent, county subdivision, governmental unit, incorporated place, and independent city.\",\"baseEntityReference\":{\"name\":\"City\",\"path\":\"City.cdm.json/City\"},\"primaryKey\":[\"CityId\"],\"projectionInfo\":{\"attributes\":[{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"City.cdm.json/City\",\"name\":\"CityId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a City.\",\"isNullable\":false,\"name\":\"CityId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"City.cdm.json/City\",\"name\":\"CityName\"},\"dataType\":\"string\",\"dataTypeLength\":256,\"description\":\"The name of the City.\",\"isNullable\":true,\"name\":\"CityName\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"City.cdm.json/City\",\"name\":\"CountyCode\"},\"dataType\":\"string\",\"dataTypeLength\":3,\"description\":\"A three-digit code assigned by the National Institute of Standards and Technology (NIST) to identify each county and statistically equivalent entity within a State.\\n\\nThe NIST assigns the codes based on the alphabetic sequence of county names; it documents these codes in a FIPS publication (FIPS PUB 6). The Census Bureau also documents these codes in its Geographic Identification Code Scheme. The NIST leaves gaps in the numbering system to accommodate new counties or statistically equivalent entities. See also Federal Information Processing Standards, Geographic Identification Code Scheme.\",\"isNullable\":true,\"name\":\"CountyCode\"},{\"type\":\"New\",\"dataType\":\"integer\",\"description\":\"\",\"isNullable\":false,\"name\":\"StateId\"},{\"type\":\"New\",\"dataType\":\"long\",\"description\":\"\",\"isNullable\":true,\"name\":\"LatestRecordedPopulation\"},{\"type\":\"New\",\"dataType\":\"integer\",\"description\":\"\",\"isNullable\":false,\"name\":\"LastEditedBy\"},{\"type\":\"New\",\"dataType\":\"timestamp\",\"description\":\"\",\"isNullable\":false,\"name\":\"ValidFrom\",\"timestampFormat\":\"YYYY-MM-DD HH:MM:SS.fffffffff\"},{\"type\":\"New\",\"dataType\":\"timestamp\",\"description\":\"\",\"isNullable\":false,\"name\":\"ValidTo\",\"timestampFormat\":\"YYYY-MM-DD HH:MM:SS.fffffffff\"}]}}}",
 			"Description": "A large or important municipality in the U.S. governed under a charter granted by the state.\n\nA type of incorporated place in 49 States and the District of Columbia. In 20 States, some or all cities are not part of any MCD, and the Census Bureau also treats these as county subdivisions, statistically equivalent to MCDs. See also county subdivision, dependent place, incorporated place, independent place. \n\nA type of incorporated place in all states and the District of Columbia. In agreement with the State of Hawaii, however, the Census Bureau does not recognize the city of Honolulu for presentation of decennial census data. In Virginia, all cities are not part of any county, and the Census Bureau treats them as county equivalents as well as places for purposes of data presentation; there also is one such independent city in each of three states: Maryland, Missouri, and Nevada. In 20 states, some or all cities are not part of any minor civil division, and the Census Bureau treats them as county subdivisions for purposes of data presentation. See county equivalent, county subdivision, governmental unit, incorporated place, and independent city.",
 			"DisplayFolderInfo": "{\"name\":\"Geography\",\"colorCode\":\"#630454\"}",
 			"PrimaryKeys": "CityId",
-			"spark.sql.sources.provider": "parquet",
-			"sql:IsAppendOnly": false
+			"spark.sql.sources.provider": "parquet"
 		},
 		"Retention": 0,
 		"Temporary": false,

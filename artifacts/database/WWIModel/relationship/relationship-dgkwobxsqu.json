@@ -1,0 +1,23 @@
+{
+	"name": "relationship-dgkwobxsqu",
+	"properties": {
+		"Name": "relationship-dgkwobxsqu",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "WWIModel"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "City",
+		"ToTableName": "Location",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "CityId",
+				"ToColumnName": "CityId"
+			}
+		],
+		"RelationshipType": 0
+	},
+	"type": "RELATIONSHIP"
+}
