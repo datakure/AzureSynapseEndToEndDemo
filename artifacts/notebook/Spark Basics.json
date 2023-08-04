@@ -7,6 +7,10 @@
 			"referenceName": "spwesyndem",
 			"type": "BigDataPoolReference"
 		},
+		"targetSparkConfiguration": {
+			"referenceName": "sparkConfiguration1",
+			"type": "SparkConfigurationReference"
+		},
 		"sessionProperties": {
 			"driverMemory": "56g",
 			"driverCores": 8,
@@ -17,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "47aebfd4-3634-4994-945c-eb775b89208e"
+				"spark.autotune.trackingId": "61ff0407-ec36-41ff-8e9b-2251ce8ab563"
 			}
 		},
 		"metadata": {
@@ -45,7 +49,8 @@
 				"memory": 56,
 				"automaticScaleJobs": false
 			},
-			"sessionKeepAliveTimeout": 30
+			"sessionKeepAliveTimeout": 30,
+			"targetSparkConfiguration": "sparkConfiguration1"
 		},
 		"cells": [
 			{
@@ -66,10 +71,15 @@
 				},
 				"source": [
 					"%%pyspark\r\n",
-					"#sc.getConf().getAll ()  get(\"ADLSPath\")\r\n",
-					"print(sc.getConf().contains('ADLSPath'))"
+					"from pyspark.sql import SparkSession\r\n",
+					"#mssparkutils.credentials.help()\r\n",
+					"#sc.getConf().getAll () \r\n",
+					"# get(\"ADLSPath\")\r\n",
+					"#print(spark.conf.get(\"ADLSPath\"))\r\n",
+					"print(sc.getConf().contains(\"spark.synapse.ADLSPath\"))\r\n",
+					""
 				],
-				"execution_count": 17
+				"execution_count": 5
 			},
 			{
 				"cell_type": "code",
