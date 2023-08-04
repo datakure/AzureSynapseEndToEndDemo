@@ -2,13 +2,15 @@
 	"name": "sparkConfiguration1",
 	"properties": {
 		"configs": {
-			"KeyVaultName": "test"
+			"KeyVaultName": "test",
+			"AdlsPath": "aa"
 		},
-		"created": "2023-08-04T11:28:37.1670000+02:00",
+		"created": "2023-08-04T11:31:49.0590000+02:00",
 		"createdBy": "henrikkure@microsoft.com",
 		"annotations": [],
 		"configMergeRule": {
-			"artifact.currentOperation.KeyVaultName": "replace"
+			"artifact.currentOperation.KeyVaultName": "replace",
+			"artifact.currentOperation.AdlsPath": "replace"
 		}
 	}
 }
