@@ -21,7 +21,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "8b433c6c-64ea-48bc-a19c-bee12f46f528"
+				"spark.autotune.trackingId": "cb5d2a89-75cd-4d43-b2ca-3b0bc5be1c9b"
 			}
 		},
 		"metadata": {
@@ -76,12 +76,12 @@
 					"#sc.getConf().getAll () \r\n",
 					"# get(\"ADLSPath\")\r\n",
 					"#print(spark.conf.get(\"spark.synapse.ADLSPath\"))\r\n",
-					"#print(sc.getConf().contains(\"spark.synapse.ADLSPath\"))\r\n",
+					"print(sc.getConf().contains(\"spark.ADLSPath\"))\r\n",
 					"\r\n",
 					"#mssparkutils.credentials.getSecret(\"AzureKeyVault\",\"test\")\r\n",
 					"mssparkutils.credentials.getSecret(\"pvlab-cda48b-keyvault\",\"test\")"
 				],
-				"execution_count": 13
+				"execution_count": 14
 			},
 			{
 				"cell_type": "code",
