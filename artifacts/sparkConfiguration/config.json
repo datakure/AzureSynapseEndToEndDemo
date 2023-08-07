@@ -1,0 +1,13 @@
+{
+	"name": "config",
+	"properties": {
+		"configs": {
+			"spark.executorEnv.environmentName": "ppe"
+		},
+		"created": "2023-08-07T13:41:04.6120000+02:00",
+		"createdBy": "henrikkure@microsoft.com",
+		"configMergeRule": {
+			"artifact.currentOperation.spark.executorEnv.environmentName": "replace"
+		}
+	}
+}
