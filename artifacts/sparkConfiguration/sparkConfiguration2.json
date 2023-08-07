@@ -1,0 +1,16 @@
+{
+	"name": "sparkConfiguration2",
+	"properties": {
+		"configs": {
+			"spark.executorEnv.ADLSPath": "adls-env",
+			"spark.synapse.ADLSPath": "adls-config"
+		},
+		"created": "2023-08-07T13:48:08.7250000+02:00",
+		"createdBy": "henrikkure@microsoft.com",
+		"annotations": [],
+		"configMergeRule": {
+			"artifact.currentOperation.spark.executorEnv.ADLSPath": "replace",
+			"artifact.currentOperation.spark.synapse.ADLSPath": "replace"
+		}
+	}
+}
