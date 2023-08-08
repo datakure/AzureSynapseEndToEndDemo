@@ -8,6 +8,9 @@
 		"SynapseDedicatedPoolLS_connectionString": {
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=\"@{concat(linkedService().ServerName,'.sql.azuresynapse.net')}\";Initial Catalog=@{linkedService().DatabaseName}"
 		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://pvlab-cda48b-keyvault.vault.azure.net/"
+		},
 		"Source_Dataset_LS_sasUri": {
 			"value": ""
 		},

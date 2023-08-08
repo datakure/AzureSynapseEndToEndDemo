@@ -12,6 +12,10 @@
 			"metadata": "Secure string for 'connectionString' of 'SynapseDedicatedPoolLS'",
 			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=\"@{concat(linkedService().ServerName,'.sql.azuresynapse.net')}\";Initial Catalog=@{linkedService().DatabaseName}"
 		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://pvlab-cda48b-keyvault.vault.azure.net/"
+		},
 		"Source_Dataset_LS_sasUri": {
 			"type": "secureString",
 			"metadata": "Secure string for 'sasUri' of 'Source_Dataset_LS'"
@@ -2656,6 +2660,19 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/AzureKeyVault1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Source_Dataset_LS')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -3839,6 +3856,57 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Notebook 1')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "5504faf3-a744-4fcd-955a-458a031b9972"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "python"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"tags": [
+								"parameters"
+							]
+						},
+						"source": [
+							"\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/ObservationParquetFlatten_Large')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
@@ -4484,6 +4552,10 @@
 					"referenceName": "spwesyndem",
 					"type": "BigDataPoolReference"
 				},
+				"targetSparkConfiguration": {
+					"referenceName": "sparkConfiguration1",
+					"type": "SparkConfigurationReference"
+				},
 				"sessionProperties": {
 					"driverMemory": "56g",
 					"driverCores": 8,
@@ -4494,7 +4566,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "cb97fd6a-040c-4958-afb3-30ce5f20273e"
+						"spark.autotune.trackingId": "aa175c09-8833-4f8f-8d73-8ed05a98fbe7"
 					}
 				},
 				"metadata": {
@@ -4521,9 +4593,66 @@
 						"cores": 8,
 						"memory": 56
 					},
-					"sessionKeepAliveTimeout": 30
+					"sessionKeepAliveTimeout": 30,
+					"targetSparkConfiguration": "sparkConfiguration1"
 				},
 				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"tags": [
+								"parameters"
+							]
+						},
+						"source": [
+							"# Parameters can be supplied to notebook from pipeline using same name as variable\r\n",
+							"ParamName = 'ParamValue'\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"microsoft": {
+								"language": "python"
+							}
+						},
+						"source": [
+							"%%pyspark\r\n",
+							"from pyspark.sql import SparkSession\r\n",
+							"#mssparkutils.credentials.help()\r\n",
+							"#sc.getConf().getAll() \r\n",
+							"# get(\"ADLSPath\")\r\n",
+							"#print(spark.conf.get(\"spark.synapse.ADLSPath\"))\r\n",
+							"#print(sc.getConf().contains(\"spark.ADLSPath\"))\r\n",
+							"str = spark.sparkContext.environment.get('environmentName')\r\n",
+							"print(str)\r\n",
+							"#Ref to linked service not working: mssparkutils.credentials.getSecret(\"AzureKeyVault\",\"test\")\r\n",
+							"#mssparkutils.credentials.getSecret(\"pvlab-cda48b-keyvault\",\"test\")"
+						],
+						"outputs": [],
+						"execution_count": 29
+					},
 					{
 						"cell_type": "code",
 						"metadata": {
@@ -4805,6 +4934,60 @@
 						"execution_count": 22
 					}
 				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/sparkConfigurations/sparkConfiguration1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/config')]",
+			"type": "Microsoft.Synapse/workspaces/sparkConfigurations",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"configs": {
+					"spark.executorEnv.environmentName": "ppe"
+				},
+				"created": "2023-08-07T13:41:04.6120000+02:00",
+				"createdBy": "henrikkure@microsoft.com",
+				"configMergeRule": {
+					"artifact.currentOperation.spark.executorEnv.environmentName": "replace"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sparkConfiguration1')]",
+			"type": "Microsoft.Synapse/workspaces/sparkConfigurations",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"configs": {
+					"ADLSPath": "abfss://sales@dlwesyndem.dfs.core.windows.net"
+				},
+				"created": "2023-08-04T11:52:10.7480000+02:00",
+				"createdBy": "henrikkure@microsoft.com",
+				"annotations": [],
+				"configMergeRule": {
+					"artifact.currentOperation.ADLSPath": "replace"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/sparkConfiguration2')]",
+			"type": "Microsoft.Synapse/workspaces/sparkConfigurations",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"configs": {
+					"spark.executorEnv.ADLSPath": "adls-env",
+					"spark.synapse.ADLSPath": "adls-config"
+				},
+				"created": "2023-08-07T13:48:08.7250000+02:00",
+				"createdBy": "henrikkure@microsoft.com",
+				"annotations": [],
+				"configMergeRule": {
+					"artifact.currentOperation.spark.executorEnv.ADLSPath": "replace",
+					"artifact.currentOperation.spark.synapse.ADLSPath": "replace"
+				}
 			},
 			"dependsOn": []
 		},
@@ -13001,8 +13184,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Bank.cdm.json/Bank",
 											"Name": "BankId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "BankName",
@@ -13019,8 +13201,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Bank.cdm.json/Bank",
 											"Name": "BankName"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "BankDBNumber",
@@ -13036,8 +13217,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Bank.cdm.json/Bank",
 											"Name": "BankDBNumber"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "BankAbaNumber",
@@ -13053,8 +13233,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Bank.cdm.json/Bank",
 											"Name": "BankAbaNumber"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "BankTelephoneNumber",
@@ -13072,8 +13251,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Bank.cdm.json/Bank",
 											"Name": "BankTelephoneNumber"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "BankFaxNumber",
@@ -13091,8 +13269,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Bank.cdm.json/Bank",
 											"Name": "BankFaxNumber"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "BankEmailAddress",
@@ -13109,8 +13286,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Bank.cdm.json/Bank",
 											"Name": "BankEmailAddress"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DunsNumber",
@@ -13128,8 +13304,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Bank.cdm.json/Bank",
 											"Name": "DunsNumber"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -13203,8 +13378,7 @@
 										"BaseAttributeReference": {
 											"Entity": "BankAccount.cdm.json/BankAccount",
 											"Name": "BankAccountId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "BankAccountToken",
@@ -13220,8 +13394,7 @@
 										"BaseAttributeReference": {
 											"Entity": "BankAccount.cdm.json/BankAccount",
 											"Name": "BankAccountToken"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "BankAccountNote",
@@ -13238,8 +13411,7 @@
 										"BaseAttributeReference": {
 											"Entity": "BankAccount.cdm.json/BankAccount",
 											"Name": "BankAccountNote"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -13313,8 +13485,7 @@
 										"BaseAttributeReference": {
 											"Entity": "City.cdm.json/City",
 											"Name": "CityId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "CityName",
@@ -13331,8 +13502,7 @@
 										"BaseAttributeReference": {
 											"Entity": "City.cdm.json/City",
 											"Name": "CityName"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "CountyCode",
@@ -13349,8 +13519,7 @@
 										"BaseAttributeReference": {
 											"Entity": "City.cdm.json/City",
 											"Name": "CountyCode"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "StateId",
@@ -13362,8 +13531,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LatestRecordedPopulation",
@@ -13375,8 +13543,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "long"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LastEditedBy",
@@ -13388,8 +13555,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "ValidFrom",
@@ -13402,8 +13568,7 @@
 												"TimestampFormat": "YYYY-MM-DD HH:MM:SS.fffffffff",
 												"HIVE_TYPE_STRING": "timestamp"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "ValidTo",
@@ -13416,8 +13581,7 @@
 												"TimestampFormat": "YYYY-MM-DD HH:MM:SS.fffffffff",
 												"HIVE_TYPE_STRING": "timestamp"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -13491,8 +13655,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Country.cdm.json/Country",
 											"Name": "CountryId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "IsoCountryName",
@@ -13509,8 +13672,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Country.cdm.json/Country",
 											"Name": "IsoCountryName"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "Iso2LetterCountryCode",
@@ -13527,8 +13689,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Country.cdm.json/Country",
 											"Name": "Iso2LetterCountryCode"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "Iso3LetterCountryCode",
@@ -13545,8 +13706,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Country.cdm.json/Country",
 											"Name": "Iso3LetterCountryCode"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "Iso3DigitCountryCode",
@@ -13564,8 +13724,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Country.cdm.json/Country",
 											"Name": "Iso3DigitCountryCode"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "CapitalOrMajorCityName",
@@ -13582,8 +13741,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Country.cdm.json/Country",
 											"Name": "CapitalOrMajorCityName"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -13657,8 +13815,7 @@
 										"BaseAttributeReference": {
 											"Entity": "DeliveryMethod.cdm.json/DeliveryMethod",
 											"Name": "DeliveryMethodId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DeliveryMethodName",
@@ -13675,8 +13832,7 @@
 										"BaseAttributeReference": {
 											"Entity": "DeliveryMethod.cdm.json/DeliveryMethod",
 											"Name": "DeliveryMethodName"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DeliveryMethodDescription",
@@ -13693,8 +13849,7 @@
 										"BaseAttributeReference": {
 											"Entity": "DeliveryMethod.cdm.json/DeliveryMethod",
 											"Name": "DeliveryMethodDescription"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -13768,8 +13923,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "EmployeeId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmployeeName",
@@ -13786,8 +13940,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "EmployeeName"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DateOfBirth",
@@ -13804,8 +13957,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "DateOfBirth"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DateOfDeath",
@@ -13822,8 +13974,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "DateOfDeath"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmployeeStandardCostAmount",
@@ -13841,8 +13992,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "EmployeeStandardCostAmount"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmployeeOvertimeCostAmount",
@@ -13860,8 +14010,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "EmployeeOvertimeCostAmount"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmployeeHireDate",
@@ -13878,8 +14027,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "EmployeeHireDate"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "HighlyCompensatedEmployeeIndicator",
@@ -13895,8 +14043,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "HighlyCompensatedEmployeeIndicator"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "KeyEmployeeIndicator",
@@ -13912,8 +14059,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "KeyEmployeeIndicator"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "ExemptEmployeeIndicator",
@@ -13929,8 +14075,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "ExemptEmployeeIndicator"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "NonexemptEmployeeIndicator",
@@ -13946,8 +14091,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "NonexemptEmployeeIndicator"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "AlienStatusId",
@@ -13963,8 +14107,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "AlienStatusId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "SexId",
@@ -13980,8 +14123,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "SexId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "GenderId",
@@ -13997,8 +14139,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "GenderId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "RacialCategoryId",
@@ -14014,8 +14155,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "RacialCategoryId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EthnicCategoryId",
@@ -14031,8 +14171,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "EthnicCategoryId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmploymentLeadSourceId",
@@ -14048,8 +14187,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "EmploymentLeadSourceId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "SecurityClearanceId",
@@ -14065,8 +14203,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "SecurityClearanceId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "SecurityLevelId",
@@ -14082,8 +14219,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "SecurityLevelId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PartyId",
@@ -14099,8 +14235,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Employee.cdm.json/Employee",
 											"Name": "PartyId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -14174,8 +14309,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeEmail.cdm.json/EmployeeEmail",
 											"Name": "EmployeeId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmailTypeId",
@@ -14191,8 +14325,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeEmail.cdm.json/EmployeeEmail",
 											"Name": "EmailTypeId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmailAddress",
@@ -14209,8 +14342,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeEmail.cdm.json/EmployeeEmail",
 											"Name": "EmailAddress"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PeriodStartTimestamp",
@@ -14227,8 +14359,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeEmail.cdm.json/EmployeeEmail",
 											"Name": "PeriodStartTimestamp"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PeriodEndTimestamp",
@@ -14245,8 +14376,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeEmail.cdm.json/EmployeeEmail",
 											"Name": "PeriodEndTimestamp"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmployeeEmailNote",
@@ -14263,8 +14393,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeEmail.cdm.json/EmployeeEmail",
 											"Name": "EmployeeEmailNote"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -14333,8 +14462,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "IsPermittedToLogon",
@@ -14346,8 +14474,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "boolean"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LogonName",
@@ -14360,8 +14487,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "string"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -14434,8 +14560,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeLanguageUsage.cdm.json/EmployeeLanguageUsage",
 											"Name": "EmployeeId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LanguageUsageId",
@@ -14451,8 +14576,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeLanguageUsage.cdm.json/EmployeeLanguageUsage",
 											"Name": "LanguageUsageId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "IsoLanguageId",
@@ -14468,8 +14592,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeLanguageUsage.cdm.json/EmployeeLanguageUsage",
 											"Name": "IsoLanguageId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PreferenceId",
@@ -14485,8 +14608,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeLanguageUsage.cdm.json/EmployeeLanguageUsage",
 											"Name": "PreferenceId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PeriodStartTimestamp",
@@ -14503,8 +14625,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeLanguageUsage.cdm.json/EmployeeLanguageUsage",
 											"Name": "PeriodStartTimestamp"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PeriodEndTimestamp",
@@ -14521,8 +14642,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeLanguageUsage.cdm.json/EmployeeLanguageUsage",
 											"Name": "PeriodEndTimestamp"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LanguageProficiencyId",
@@ -14538,8 +14658,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeLanguageUsage.cdm.json/EmployeeLanguageUsage",
 											"Name": "LanguageProficiencyId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmployeeLanguageUsageNote",
@@ -14556,8 +14675,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeLanguageUsage.cdm.json/EmployeeLanguageUsage",
 											"Name": "EmployeeLanguageUsageNote"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -14631,8 +14749,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeNamePreference.cdm.json/EmployeeNamePreference",
 											"Name": "EmployeeId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "NamePreferenceId",
@@ -14648,8 +14765,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeNamePreference.cdm.json/EmployeeNamePreference",
 											"Name": "NamePreferenceId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PeriodStartDate",
@@ -14666,8 +14782,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeNamePreference.cdm.json/EmployeeNamePreference",
 											"Name": "PeriodStartDate"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PeriodEndDate",
@@ -14684,8 +14799,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeNamePreference.cdm.json/EmployeeNamePreference",
 											"Name": "PeriodEndDate"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmployeeNameId",
@@ -14701,8 +14815,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeNamePreference.cdm.json/EmployeeNamePreference",
 											"Name": "EmployeeNameId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmployeeNamePreferenceNote",
@@ -14719,8 +14832,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeNamePreference.cdm.json/EmployeeNamePreference",
 											"Name": "EmployeeNamePreferenceNote"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -14794,8 +14906,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeTelephoneNumber.cdm.json/EmployeeTelephoneNumber",
 											"Name": "EmployeeId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "TelephoneNumberTypeId",
@@ -14811,8 +14922,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeTelephoneNumber.cdm.json/EmployeeTelephoneNumber",
 											"Name": "TelephoneNumberTypeId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "TelephoneNumber",
@@ -14830,8 +14940,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeTelephoneNumber.cdm.json/EmployeeTelephoneNumber",
 											"Name": "TelephoneNumber"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PeriodStartTimestamp",
@@ -14848,8 +14957,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeTelephoneNumber.cdm.json/EmployeeTelephoneNumber",
 											"Name": "PeriodStartTimestamp"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PeriodEndTimestamp",
@@ -14866,8 +14974,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeTelephoneNumber.cdm.json/EmployeeTelephoneNumber",
 											"Name": "PeriodEndTimestamp"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmployeeTelephoneNumberNote",
@@ -14884,8 +14991,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeTelephoneNumber.cdm.json/EmployeeTelephoneNumber",
 											"Name": "EmployeeTelephoneNumberNote"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationId",
@@ -14901,8 +15007,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeTelephoneNumber.cdm.json/EmployeeTelephoneNumber",
 											"Name": "LocationId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "TextCapableIndicator",
@@ -14918,8 +15023,7 @@
 										"BaseAttributeReference": {
 											"Entity": "EmployeeTelephoneNumber.cdm.json/EmployeeTelephoneNumber",
 											"Name": "TextCapableIndicator"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -14988,8 +15092,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmployeeTypeName",
@@ -15002,8 +15105,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "string"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmployeeTypeDescription",
@@ -15016,8 +15118,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "string"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -15090,8 +15191,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationName",
@@ -15108,8 +15208,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationName"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationDescription",
@@ -15126,8 +15225,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationDescription"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationAddressLine1",
@@ -15144,8 +15242,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationAddressLine1"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationAddressLine2",
@@ -15162,8 +15259,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationAddressLine2"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationStateId",
@@ -15179,8 +15275,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationStateId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationZipCode",
@@ -15198,8 +15293,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationZipCode"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationNote",
@@ -15216,8 +15310,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationNote"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationLatitude",
@@ -15235,8 +15328,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationLatitude"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationLongitude",
@@ -15254,8 +15346,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationLongitude"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationDatum",
@@ -15272,8 +15363,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationDatum"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationElevation",
@@ -15291,8 +15381,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationElevation"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationElevationUnitOfMeasureId",
@@ -15308,8 +15397,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "LocationElevationUnitOfMeasureId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "GlobalLocationNumber",
@@ -15327,8 +15415,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "GlobalLocationNumber"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "TimezoneId",
@@ -15344,8 +15431,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "TimezoneId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DaylightSavingsTimeObservedIndicator",
@@ -15361,8 +15447,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "DaylightSavingsTimeObservedIndicator"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "CountryId",
@@ -15378,8 +15463,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "CountryId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "SubdivisionId",
@@ -15395,8 +15479,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Location.cdm.json/Location",
 											"Name": "SubdivisionId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "CityId",
@@ -15408,8 +15491,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -15483,8 +15565,7 @@
 										"BaseAttributeReference": {
 											"Entity": "State.cdm.json/State",
 											"Name": "StateId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "StateName",
@@ -15501,8 +15582,7 @@
 										"BaseAttributeReference": {
 											"Entity": "State.cdm.json/State",
 											"Name": "StateName"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "CensusDivisionId",
@@ -15518,8 +15598,7 @@
 										"BaseAttributeReference": {
 											"Entity": "State.cdm.json/State",
 											"Name": "CensusDivisionId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "FipsCode",
@@ -15536,8 +15615,7 @@
 										"BaseAttributeReference": {
 											"Entity": "State.cdm.json/State",
 											"Name": "FipsCode"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "StateUspsCode",
@@ -15554,8 +15632,7 @@
 										"BaseAttributeReference": {
 											"Entity": "State.cdm.json/State",
 											"Name": "StateUspsCode"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -15629,8 +15706,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "VendorId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "VendorName",
@@ -15647,8 +15723,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "VendorName"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "VendorNote",
@@ -15665,8 +15740,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "VendorNote"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "VendorTypeId",
@@ -15682,8 +15756,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "VendorTypeId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "VendorDateOfEstablishment",
@@ -15700,8 +15773,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "VendorDateOfEstablishment"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "StateOfVendorEstablishment",
@@ -15718,8 +15790,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "StateOfVendorEstablishment"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "CountryOfVendorEstablishment",
@@ -15736,8 +15807,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "CountryOfVendorEstablishment"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "StateOfVendorResidence",
@@ -15754,8 +15824,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "StateOfVendorResidence"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "CountryOfVendorResidence",
@@ -15772,8 +15841,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "CountryOfVendorResidence"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "FirstDateOfOperation",
@@ -15790,8 +15858,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "FirstDateOfOperation"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "CurrentManagementFirstControlDate",
@@ -15808,8 +15875,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "CurrentManagementFirstControlDate"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "StockExchangeName",
@@ -15826,8 +15892,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "StockExchangeName"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "ListedSecuritySymbol",
@@ -15844,8 +15909,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "ListedSecuritySymbol"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "BankruptcyIndicator",
@@ -15861,8 +15925,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "BankruptcyIndicator"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "SmallBusinessIndicator",
@@ -15878,8 +15941,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "SmallBusinessIndicator"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "ManufacturingIndicator",
@@ -15895,8 +15957,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "ManufacturingIndicator"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "ForeignOwnedIndicator",
@@ -15912,8 +15973,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "ForeignOwnedIndicator"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DunsNumber",
@@ -15931,8 +15991,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "DunsNumber"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DunBradstreetSingleLocationSubsidiary",
@@ -15948,8 +16007,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "DunBradstreetSingleLocationSubsidiary"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DunBradstreetHeadquarters",
@@ -15965,8 +16023,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "DunBradstreetHeadquarters"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DunBradstreetBranch",
@@ -15982,8 +16039,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "DunBradstreetBranch"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DunBradstreetDivision",
@@ -15999,8 +16055,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "DunBradstreetDivision"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DunBradstreetSubsidiary",
@@ -16016,8 +16071,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "DunBradstreetSubsidiary"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DunBradstreetParent",
@@ -16033,8 +16087,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "DunBradstreetParent"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DunBradstreetUltimate",
@@ -16050,8 +16103,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "DunBradstreetUltimate"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DunBradstreetGlobalUltimate",
@@ -16067,8 +16119,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "DunBradstreetGlobalUltimate"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LegalEntityFormId",
@@ -16084,8 +16135,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "LegalEntityFormId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "ResponsibilityCenterId",
@@ -16101,8 +16151,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "ResponsibilityCenterId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LedgerId",
@@ -16118,8 +16167,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "LedgerId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LedgerAccountNumber",
@@ -16136,8 +16184,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "LedgerAccountNumber"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "NaicsNationalIndustryCode",
@@ -16155,8 +16202,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "NaicsNationalIndustryCode"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "SicIndustryCode",
@@ -16174,8 +16220,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "SicIndustryCode"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "AnzsicClassCode",
@@ -16193,8 +16238,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "AnzsicClassCode"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "IsoCurrencyCode",
@@ -16211,8 +16255,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "IsoCurrencyCode"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PartyId",
@@ -16228,8 +16271,7 @@
 										"BaseAttributeReference": {
 											"Entity": "Vendor.cdm.json/Vendor",
 											"Name": "PartyId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "SupplierReference",
@@ -16242,8 +16284,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "string"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "BankBranch",
@@ -16256,8 +16297,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "string"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PaymentDays",
@@ -16269,8 +16309,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LastEditedBy",
@@ -16282,8 +16321,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "ValidFrom",
@@ -16296,8 +16334,7 @@
 												"TimestampFormat": "YYYY-MM-DD HH:MM:SS.fffffffff",
 												"HIVE_TYPE_STRING": "timestamp"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "ValidTo",
@@ -16310,8 +16347,7 @@
 												"TimestampFormat": "YYYY-MM-DD HH:MM:SS.fffffffff",
 												"HIVE_TYPE_STRING": "timestamp"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -16380,8 +16416,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "BankAccountId",
@@ -16393,8 +16428,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PeriodStart",
@@ -16407,8 +16441,7 @@
 												"TimestampFormat": "YYYY-MM-DD HH:MM:SS.fffffffff",
 												"HIVE_TYPE_STRING": "timestamp"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PeriodEnd",
@@ -16421,8 +16454,7 @@
 												"TimestampFormat": "YYYY-MM-DD HH:MM:SS.fffffffff",
 												"HIVE_TYPE_STRING": "timestamp"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "VendorAccountBankAccountNote",
@@ -16435,8 +16467,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "string"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -16504,8 +16535,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "VendorIId",
@@ -16517,8 +16547,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "LocationId",
@@ -16530,8 +16559,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "DeliveryMethodId",
@@ -16543,8 +16571,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -16612,8 +16639,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "VendorEmployeeRelationshipTypeName",
@@ -16626,8 +16652,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "string"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "VendorEmployeeRelationshipTypeDescription",
@@ -16640,8 +16665,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "string"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -16709,8 +16733,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "EmployeeId",
@@ -16722,8 +16745,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "VendorEmployeeRelationshipTypeId",
@@ -16735,8 +16757,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "integer"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PeriodStartDate",
@@ -16749,8 +16770,7 @@
 												"DateFormat": "YYYY-MM-DD",
 												"HIVE_TYPE_STRING": "date"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "PeriodEndDate",
@@ -16763,8 +16783,7 @@
 												"DateFormat": "YYYY-MM-DD",
 												"HIVE_TYPE_STRING": "date"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "VendorEmployeeRelationshipNote",
@@ -16777,8 +16796,7 @@
 											"Properties": {
 												"HIVE_TYPE_STRING": "string"
 											}
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -16851,8 +16869,7 @@
 										"BaseAttributeReference": {
 											"Entity": "VendorType.cdm.json/VendorType",
 											"Name": "VendorTypeId"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "VendorTypeName",
@@ -16869,8 +16886,7 @@
 										"BaseAttributeReference": {
 											"Entity": "VendorType.cdm.json/VendorType",
 											"Name": "VendorTypeName"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									},
 									{
 										"Name": "VendorTypeDescription",
@@ -16887,8 +16903,7 @@
 										"BaseAttributeReference": {
 											"Entity": "VendorType.cdm.json/VendorType",
 											"Name": "VendorTypeDescription"
-										},
-										"DeltaFormatInvalidMessages": []
+										}
 									}
 								],
 								"Format": {
@@ -17173,7 +17188,7 @@
 			"properties": {
 				"autoPause": {
 					"enabled": true,
-					"delayInMinutes": 15
+					"delayInMinutes": 5
 				},
 				"autoScale": {
 					"enabled": true,
@@ -17185,6 +17200,12 @@
 				"nodeSizeFamily": "MemoryOptimized",
 				"sparkVersion": "3.1",
 				"isComputeIsolationEnabled": false,
+				"sparkConfigProperties": {
+					"configurationType": "Artifact",
+					"filename": "sparkConfiguration2",
+					"content": "{\"name\":\"sparkConfiguration2\",\"properties\":{\"configs\":{\"spark.executorEnv.ADLSPath\":\"adls-env\",\"spark.synapse.ADLSPath\":\"adls-config\"},\"annotations\":[],\"type\":\"Microsoft.Synapse/workspaces/sparkconfigurations\",\"description\":\"\",\"notes\":\"\",\"created\":\"2023-08-07T13:48:08.7250000+02:00\",\"createdBy\":\"henrikkure@microsoft.com\",\"configMergeRule\":{\"admin.currentOperation.spark.executorEnv.ADLSPath\":\"replace\",\"admin.currentOperation.spark.synapse.ADLSPath\":\"replace\"}}}",
+					"time": "2023-08-07T11:48:41.6455658Z"
+				},
 				"sessionLevelPackagesEnabled": false,
 				"annotations": []
 			},
