@@ -1,0 +1,14 @@
+{
+	"name": "sparkConfiguration3",
+	"properties": {
+		"configs": {
+			"test": "test"
+		},
+		"created": "2023-08-09T10:59:38.1230000+02:00",
+		"createdBy": "henrikkure@microsoft.com",
+		"annotations": [],
+		"configMergeRule": {
+			"artifact.currentOperation.test": "replace"
+		}
+	}
+}
