@@ -4992,6 +4992,23 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/sparkConfiguration3')]",
+			"type": "Microsoft.Synapse/workspaces/sparkConfigurations",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"configs": {
+					"test": "test"
+				},
+				"created": "2023-08-09T10:59:38.1230000+02:00",
+				"createdBy": "henrikkure@microsoft.com",
+				"annotations": [],
+				"configMergeRule": {
+					"artifact.currentOperation.test": "replace"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/HealthcareProviders')]",
 			"type": "Microsoft.Synapse/workspaces/databases",
 			"apiVersion": "2019-06-01-preview",
